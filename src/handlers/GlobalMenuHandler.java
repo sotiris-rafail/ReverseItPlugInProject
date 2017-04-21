@@ -79,6 +79,7 @@ public class GlobalMenuHandler extends AbstractHandler implements IWorkbenchWind
 				}
 			}
 			classDraw.startDrawer();
+			//classDraw.openShell();
 			classDraw.stopDrawer();
 			System.exit(0);
 		/*}catch(Exception e) {
