@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	<extension
+		point="org.eclipse.ui.actionSets">
+		<actionSet
+			label="Sample Action Set"
+			visible="true"
+			id="ReverseItPlugin.actionSet">
+			<menu
+				label="Reverse It"
+				id="sampleMenu1">
+				<separator
+                  name="sampleGroup">
+            	</separator>
+            </menu>
+            <menu
+				label="Icon"
+				id="sampleMenu2">
+				<separator
+                  name="sampleGroup1">
+            	</separator>
+            </menu>
+            <action
+               label="&amp;Select Java Files"
+               icon="icons/sample.gif"
+               class="handlers.GlobalMenuHandler"
+               tooltip="Reverse It"
+               menubarPath="sampleMenu1/sampleGroup"
+               toolbarPath="sampleGroup"
+               id="handlers.GlobalMenuHandler">
+         	</action>
+		</actionSet>
+	</extension>
+	
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Sample Category"
+            id="ReverseItPlugin">
+      </category>
+      <view
+            name="Sample View"
+            icon="icons/sample.gif"
+            category="ReverseItPlugin"
+            class="reverseitplugin.views.SampleView"
+            id="reverseitplugin.views.SampleView">
+      </view>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.ProblemView"
+               relationship="right"
+               id="reverseitplugin.views.SampleView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+<?ignore
+   <!-- Command for Package Explorer -->
+	<extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=additions">
+         <command
+               commandId="New Command"
+               icon="icons/sample.gif"
+               label="New Root Command From John"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="org.eclipse.cdt.ui.CPerspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=additions">
+         <menu
+               id="reverse it"
+               label="Reverse it">
+            <command
+            	  defaultHandler="handlers.GlobalMenuHandler"
+                  commandId="SelectJFiles"
+                  icon="icons/sample.gif"
+                  label="Select Java Files"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   
+   <!-- Handles the previous command -->
+   <extension
+ 		point="org.eclipse.ui.handlers">
+ 		<handler
+  			commandId="SelectJFiles"
+  			class="handlers.GlobalMenuHandler">
+  			<activeWhen>
+   				<with variable="selection">
+    				<count value="1" />
+    				<iterate operator="and">
+     					<adapt type="org.eclipse.core.resources.IResource" />
+    				</iterate>
+   				</with>
+  			</activeWhen>
+ 		</handler>
+	</extension>
+?>
+</plugin>
