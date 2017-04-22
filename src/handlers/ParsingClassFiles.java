@@ -18,7 +18,7 @@ public class ParsingClassFiles {
 	public SearchingForAttributes sfa;
 	public UMLClassDrawer ucd;
 	
-	public void ParsingListwithClassFiles(String path) {
+	public ClassForClass ParsingListwithClassFiles(String path) {
 		
 		try {
 			ClassParser cp = new ClassParser(path);
@@ -38,7 +38,6 @@ public class ParsingClassFiles {
 				if(!(superclassname.equals("java.lang.Object"))) {
 					String simpleSuperClassName = superclassname.substring(superclassname.lastIndexOf('.') + 1);
 					classobj.setWhatExtends(simpleSuperClassName);
-					//System.out.println(simpleSuperClassName);
 					if(!(superclassname.isEmpty())){
 						classobj.setDoesExtention(true);
 					}
@@ -49,16 +48,13 @@ public class ParsingClassFiles {
 				List<String> interfaces = new ArrayList<>();
 				for(int i = 0; i < interfaceTable.length; i++) {
 					String simpleIntefaceName = interfaceTable[i].substring(interfaceTable[i].lastIndexOf('.') + 1);
-					//System.out.println(simpleIntefaceName);
 					interfaces.add(simpleIntefaceName);
 				}
 				classobj.setWhichInterface(interfaces);
 				if(!(interfaces.isEmpty())){
 					classobj.setDoesImplementation(true);
 				}
-				//System.out.println(classobj.toString1());
 				//The attributes of each class
-				//System.out.println("Attributes on Class");
 				Field fields[] = new Field[1000];
 				cp = new ClassParser(path);
 				fields = cp.parse().getFields();
@@ -68,13 +64,11 @@ public class ParsingClassFiles {
 					String[] parts2 = string2.split(" "); 
 					attriobj = new ClassForAttributes(parts2[0],parts2[1],parts2[2]);
 					attriList.add(attriobj);
-					//System.out.println(attriobj.toString());
 				}
 				//The methods of each class
 				cp = new ClassParser(path);
 				Method meth[] = new Method[1000];
 				meth = cp.parse().getMethods();
-				//System.out.println("Methods on Class");
 				for(int i = 0; i < meth.length; i++) {
 					String string = meth[i].toString();
 					String[] parts = string.split(" ");
@@ -82,7 +76,6 @@ public class ParsingClassFiles {
 					if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
 						methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
 						methodList.add(methodobj);
-						//System.out.println(methodobj.toString());	
 					}
 				}
 			}
@@ -94,36 +87,62 @@ public class ParsingClassFiles {
 				String className = cp.parse().getClassName();
 				String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
 				classobj.setClassName(simpleClassName);
-				//System.out.println(classobj.toString2());
+				//The methods of each class
+				cp = new ClassParser(path);
+				Method meth[] = new Method[1000];
+				meth = cp.parse().getMethods();
+				for(int i = 0; i < meth.length; i++) {
+					String string = meth[i].toString();
+					String[] parts = string.split(" ");
+					String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
+					if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
+						methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
+					}
+				}
 			}
 			//Check if the class on the path is an Abstract Class
 			cp = new ClassParser(path);
 			if(cp.parse().isAbstract()){
-				classobj = new ClassForClass(true,"nothing");
-				cp = new ClassParser(path);
-				String className = cp.parse().getClassName();
-				String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
-				classobj.setClassName(simpleClassName);
-				//System.out.println(classobj.toString3());
+				if(!(classobj.isInterface())){
+					classobj = new ClassForClass(true,"nothing");
+					cp = new ClassParser(path);
+					String className = cp.parse().getClassName();
+					String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
+					classobj.setClassName(simpleClassName);
+					//The attributes of each class
+					Field fields[] = new Field[1000];
+					cp = new ClassParser(path);
+					fields = cp.parse().getFields();
+					for(int i = 0; i < fields.length; i++) {
+						String string2 = fields[i].toString();
+						String[] parts2 = string2.split(" "); 
+						attriobj = new ClassForAttributes(parts2[0],parts2[1],parts2[2]);
+						attriList.add(attriobj);
+					}
+					//The methods of each class
+					cp = new ClassParser(path);
+					Method meth[] = new Method[1000];
+					meth = cp.parse().getMethods();
+					for(int i = 0; i < meth.length; i++) {
+						String string = meth[i].toString();
+						String[] parts = string.split(" ");
+						String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
+						if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
+							methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
+							methodList.add(methodobj);
+						}
+					}
+				}
 			}
-			ucd.buildTable(classobj, methodList, attriList);
+			classobj.setAttris(attriList);
+			classobj.setMethods(methodList);
+
 		}catch(Exception e) {
 			
 			System.out.println(e.getMessage());
 			System.out.println(e.getCause().toString());
 			System.exit(0);
 		}
+		return	classobj;
 	}
-	public ClassForClass getObjectForClasses() {
-
-		return classobj;
-	}
-	public ClassForAttributes getObjectForAttributes() {
-		
-		return attriobj;
-	}
-	public ClassForMethods getObjectForMethods() {
-	
-	return methodobj;
-}
 }

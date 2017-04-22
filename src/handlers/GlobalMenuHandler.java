@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
+import Classes.ClassForClass;
 import umlclassdiagrams.UMLClassDrawer;
 
 /**
@@ -42,7 +43,7 @@ public class GlobalMenuHandler extends AbstractHandler implements IWorkbenchWind
 	List<String> getJavaFilesPath;
 	ParsingClassFiles pcf;
 	UMLClassDrawer classDraw;
-	
+	List<ClassForClass> classes = new ArrayList<>();
 	public GlobalMenuHandler() {
 	}
 
@@ -58,8 +59,7 @@ public class GlobalMenuHandler extends AbstractHandler implements IWorkbenchWind
 	@Override
 	public void run(IAction arg0) {
 		// TODO Auto-generated method stub
-		//try {
-			
+		try {
 			classDraw = new UMLClassDrawer();
 			new ParsingClassFiles();
 			getJavaFilesPath = new ArrayList<String>();//list that takes java files
@@ -75,20 +75,18 @@ public class GlobalMenuHandler extends AbstractHandler implements IWorkbenchWind
 				if(!(string.equals(null))) {
 					
 					pcf = new ParsingClassFiles();	
-					pcf.ParsingListwithClassFiles(string);
+					classes.add(pcf.ParsingListwithClassFiles(string));
 				}
 			}
-			classDraw.startDrawer();
-			//classDraw.openShell();
-			classDraw.stopDrawer();
+			classDraw.buildTable(classes);
 			System.exit(0);
-		/*}catch(Exception e) {
+		}catch(Exception e) {
 			
 			System.out.println(e.getMessage());
 			System.out.println(e.getStackTrace().toString());
 			System.out.println(e.getCause().toString());
 			System.exit(0);
-		}*/
+		}
 	}
 
 	@Override

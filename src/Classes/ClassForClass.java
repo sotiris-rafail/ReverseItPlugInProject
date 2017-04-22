@@ -18,6 +18,8 @@ public class ClassForClass {
     private List<String> whatExtends= new ArrayList<String>();
     private List<String> whichInterface=new ArrayList<String>();
     private String one = "no";
+    private List<ClassForMethods> methods = new ArrayList<>();
+    private List<ClassForAttributes> attris = new ArrayList<>();
     
     public ClassForClass(){}
 	public ClassForClass(boolean isClass, boolean doesExtention, boolean doesImplementation) {
@@ -53,44 +55,33 @@ public class ClassForClass {
         }
     }
 
-    public String toString1() {
+    public String ForCLass() {
         return "ClassForClass{" +
         		"ClassName="+className+
                 ", isClass=" + isClass +
                 ", doesExtention=" + doesExtention +
                 ", doesImplementation=" + doesImplementation +
                 ", whatExtends=" + show(whatExtends) +
-                ", whichInterface=" + whichInterface +
+                ", whichInterface=" + whichInterface +"\n"+
+                " Attributes="+ showAttri(attris) +"\n"+
+                " Methods="+ showMethods(methods)+
                 '}';
     }
 
-    public String show(List<String> whatExtends){
-    	String superClassNames= "null";
-    	try{
-    		if(!(whatExtends.isEmpty()) || (whatExtends != null)){
-    			superClassNames = "";
-    			for(String name: whatExtends){
-    				superClassNames += name;
-    			}
-    		}
-    	}catch(Exception e){
-    		System.out.println(e.getMessage());
-    	}
-    	return superClassNames;
-    }
-
-    public String toString2() {
+    public String ForIntercface() {
         return "ClassForClass{" +
         		"ClassName="+className+
-                ", isInterface=" + isInterface +
+                ", isInterface=" + isInterface +"\n"+
+                " Methods="+ showMethods(methods) +
                 '}';
     }
 
-
-    public String toString3() {
+    public String ForAbstract() {
         return "ClassForClass{" +
         		"ClassName="+className+
-                ", isAbstract=" + isAbstract +
+                ", isAbstract=" + isAbstract +"\n"+
+                " Attributes="+ showAttri(attris) +"\n"+
+                " Methods="+ showMethods(methods)+
                 '}';
     }
     
@@ -155,5 +146,61 @@ public class ClassForClass {
 
     public void setWhatExtends(String whatExtends) {
         this.whatExtends.add(whatExtends);
+    }
+    public List<ClassForMethods> getMethods() {
+		return methods;
+	}
+
+	public void setMethods(List<ClassForMethods> methods) {
+		this.methods = methods;
+	}
+    public List<ClassForAttributes> getAttris() {
+		return attris;
+	}
+
+	public void setAttris(List<ClassForAttributes> attris) {
+		this.attris = attris;
+	}
+    public String show(List<String> whatExtends){
+    	String superClassNames= "null";
+    	try{
+    		if(!(whatExtends.isEmpty()) || (whatExtends != null)){
+    			superClassNames = "";
+    			for(String name: whatExtends){
+    				superClassNames += name;
+    			}
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	return superClassNames;
+    }
+    public String showAttri(List<ClassForAttributes> whatExtends){
+    	String superClassNames= "null";
+    	try{
+    		if(!(whatExtends.isEmpty()) || (whatExtends != null)){
+    			superClassNames = "";
+    			for(ClassForAttributes name: whatExtends){
+    				superClassNames +=  name+"\n";
+    			}
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	return superClassNames;
+    }
+    public String showMethods(List<ClassForMethods> whatExtends){
+    	String superClassNames= "null";
+    	try{
+    		if(!(whatExtends.isEmpty()) || (whatExtends != null)){
+    			superClassNames = "";
+    			for(ClassForMethods name: whatExtends){
+    				superClassNames += name+"\n";
+    			}
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	return superClassNames;
     }
 }
