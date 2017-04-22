@@ -2,14 +2,16 @@
  * Created by swthrhs on 14/12/2016.
  */
 package Classes;
+
+
 public class ClassForMethods {
     private String access;
     private String type;
     private String methodName;
     private String[] hasAttributes;
     private String whereBelongs;
-
-    public ClassForMethods(String access, String type, String methodName, String[] hasAttributes, String whereBelongs) {
+    
+	public ClassForMethods(String access, String type, String methodName, String[] hasAttributes, String whereBelongs) {
         this.type = type;
         this.whereBelongs = whereBelongs;
         this.access = access;

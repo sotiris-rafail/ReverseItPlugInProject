@@ -41,11 +41,13 @@ public class UMLClassDrawer {
 	public void startDrawer(){
 			d.syncExec(new Runnable(){
 				public void run(){
-					shell.setSize(400, 400);
+					//shell.setSize(400, 400);
 					shell.setText("Class Diagram");
 					
 				}
 			});
+			openShell();
+			stopDrawer();
 	}
 	public void openShell(){
 		shell.open();
@@ -57,50 +59,60 @@ public class UMLClassDrawer {
 				d.sleep();	
 	}
 	
-	public void buildTable(ClassForClass cfc, List<ClassForMethods> cfm, List<ClassForAttributes> cfa){
-		attributeLabels = new ArrayList<>();
-		methodLabels = new ArrayList<>();
-		if(cfc.isClass()){
-			font = new Font(null, "Arial", 12, SWT.BOLD);
-			classLabel = new Label(cfc.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/class_obj.gif")));
-			classLabel.setFont(font);
-			if(!(cfa.isEmpty())){
-				for(ClassForAttributes obj:cfa){
-					//if(obj.getAccess() == "private") {
-						attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+	public void buildTable(List<ClassForClass> classList){
+		for(ClassForClass clas:classList){
+			attributeLabels = new ArrayList<>();
+			methodLabels = new ArrayList<>();
+			if(clas.isClass()){
+				font = new Font(null, "Arial", 12, SWT.BOLD);
+				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/class_obj.gif")));
+				classLabel.setFont(font);
+				if(!(clas.getAttris().isEmpty())){
+					for(ClassForAttributes obj:clas.getAttris()){
+						//if(obj.getAccess() == "private") {
+							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
 								new Image(d, UMLClassFigure.class.getResourceAsStream("/field_private_obj.gif")));
-						attributeLabels.add(attributeLabel);
-					//} else if(obj.getAccess() == "public") {
-						//attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+							attributeLabels.add(attributeLabel);
+							//} else if(obj.getAccess() == "public") {
+							//attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
 							//	new Image(d, UMLClassFigure.class.getResourceAsStream("/field_public_obj.gif")));
-						//attributeLabels.add(attributeLabel);
-					//}
+							//attributeLabels.add(attributeLabel);
+							//}
+					}
+				}else{
+					attributeLabel = new Label(" ");
+					attributeLabels.add(attributeLabel);
 				}
-			}else{
-				attributeLabel = new Label(" ");
-				attributeLabels.add(attributeLabel);
-			}
-			if(!(cfm.isEmpty())){
-				for(ClassForMethods obj:cfm){
-					methodLabel = new Label(obj.getMethodName() + " : " + obj.getType(), 
+				if(!(clas.getMethods().isEmpty())){
+					for(ClassForMethods obj:clas.getMethods()){
+						methodLabel = new Label(obj.getMethodName() + " : " + obj.getType(), 
 							new Image(d, UMLClassFigure.class.getResourceAsStream("/methpub_obj.gif")));
+						methodLabels.add(methodLabel);
+					}
+				}else{
+					methodLabel = new Label(" ");
 					methodLabels.add(methodLabel);
 				}
 			}else{
-				methodLabel = new Label(" ");
-				methodLabels.add(methodLabel);
+				font = new Font(null, "Arial", 12, SWT.BOLD);
+				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/class_obj.gif")));
+				classLabel.setFont(font);
 			}
 			displayClassDiagrams();
-			content.setLayoutManager(contentsLayout);
-		}else{
-			font = new Font(null, "Arial", 12, SWT.BOLD);
-			classLabel = new Label(cfc.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/class_obj.gif")));
-			classLabel.setFont(font);
 		}
+		content.setLayoutManager(contentsLayout);
+		startDrawer();
 	}
-	
+	int x = 0;
+	int y = 0;
+	int count = 0;
 	public void displayClassDiagrams() {
 		try {
+			if(count%2 == 0){
+				y =0;
+			}else{
+				y +=200;	
+			}
 				final UMLClassFigure classFigure = new UMLClassFigure(classLabel);
 				for(Label attri:attributeLabels){
 					classFigure.getAttributesCompartment().add(attri);
@@ -109,8 +121,9 @@ public class UMLClassDrawer {
 					classFigure.getMethodsCompartment().add(meth);
 				}
 			
-			contentsLayout.setConstraint(classFigure, new Rectangle(10, 10, -1, -1));
-
+			contentsLayout.setConstraint(classFigure, new Rectangle(10+x, 10+y, -1, -1));
+			x +=200;
+			count++;
 			/*
 			// Creating the connection 
 			connection = new PolylineConnection();
@@ -132,7 +145,6 @@ public class UMLClassDrawer {
 			
 			content.add(classFigure);
 			lws.setContents(content);
-			openShell();
 		} catch(Exception e) {
 			
 			System.out.println("Error : " + e.getMessage());
