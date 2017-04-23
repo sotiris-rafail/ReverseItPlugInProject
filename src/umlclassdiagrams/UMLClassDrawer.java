@@ -36,7 +36,6 @@ public class UMLClassDrawer {
 	UMLClassFigure classFigure;
 	List<Label> attributeLabels ;
 	List<Label> methodLabels ;
-	List<Figure> contents  = new ArrayList<>();
 	
 	public void startDrawer(){
 			d.syncExec(new Runnable(){
@@ -63,6 +62,7 @@ public class UMLClassDrawer {
 		for(ClassForClass clas:classList){
 			attributeLabels = new ArrayList<>();
 			methodLabels = new ArrayList<>();
+			//if class is CLass
 			if(clas.isClass()){
 				font = new Font(null, "Arial", 12, SWT.BOLD);
 				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/class_obj.gif")));
@@ -93,10 +93,52 @@ public class UMLClassDrawer {
 					methodLabel = new Label(" ");
 					methodLabels.add(methodLabel);
 				}
-			}else{
+				//If class is Interface
+			}else if(clas.isInterface()){
+				font = new Font(null, "Arial", 12, SWT.ITALIC);
+				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/class_obj.gif")));
+				classLabel.setFont(font);
+				if(!(clas.getMethods().isEmpty())){
+					for(ClassForMethods obj:clas.getMethods()){
+						methodLabel = new Label(obj.getMethodName() + " : " + obj.getType(), 
+							new Image(d, UMLClassFigure.class.getResourceAsStream("/methpub_obj.gif")));
+						methodLabels.add(methodLabel);
+					}
+				}else{
+					methodLabel = new Label(" ");
+					methodLabels.add(methodLabel);
+				}
+			//if class is abstract
+			}else if(clas.isAbstract()){
 				font = new Font(null, "Arial", 12, SWT.BOLD);
 				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/class_obj.gif")));
 				classLabel.setFont(font);
+				if(!(clas.getAttris().isEmpty())){
+					for(ClassForAttributes obj:clas.getAttris()){
+						//if(obj.getAccess() == "private") {
+							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/field_private_obj.gif")));
+							attributeLabels.add(attributeLabel);
+							//} else if(obj.getAccess() == "public") {
+							//attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+							//	new Image(d, UMLClassFigure.class.getResourceAsStream("/field_public_obj.gif")));
+							//attributeLabels.add(attributeLabel);
+							//}
+					}
+				}else{
+					attributeLabel = new Label(" ");
+					attributeLabels.add(attributeLabel);
+				}
+				if(!(clas.getMethods().isEmpty())){
+					for(ClassForMethods obj:clas.getMethods()){
+						methodLabel = new Label(obj.getMethodName() + " : " + obj.getType(), 
+							new Image(d, UMLClassFigure.class.getResourceAsStream("/methpub_obj.gif")));
+						methodLabels.add(methodLabel);
+					}
+				}else{
+					methodLabel = new Label(" ");
+					methodLabels.add(methodLabel);
+				}
 			}
 			displayClassDiagrams();
 		}
@@ -108,9 +150,9 @@ public class UMLClassDrawer {
 	int count = 0;
 	public void displayClassDiagrams() {
 		try {
-			if(count%2 == 0){
-				y =0;
-			}else{
+			if(count%2 == 0 && count != 0){
+				y =+200;
+			}else if(count % 2 != 0){
 				y +=200;	
 			}
 				final UMLClassFigure classFigure = new UMLClassFigure(classLabel);
@@ -124,7 +166,7 @@ public class UMLClassDrawer {
 			contentsLayout.setConstraint(classFigure, new Rectangle(10+x, 10+y, -1, -1));
 			x +=200;
 			count++;
-			/*
+			
 			// Creating the connection 
 			connection = new PolylineConnection();
 			ChopboxAnchor sourceAnchor = new ChopboxAnchor(classFigure);
@@ -140,8 +182,8 @@ public class UMLClassDrawer {
 			decoration.setTemplate(decorationPointList);
 			connection.setSourceDecoration(decoration);
 			
-			contents.add(connection);
-			*/
+			content.add(connection);
+			
 			
 			content.add(classFigure);
 			lws.setContents(content);
