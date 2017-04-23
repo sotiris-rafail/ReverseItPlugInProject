@@ -96,7 +96,8 @@ public class ParsingClassFiles {
 					String[] parts = string.split(" ");
 					String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
 					if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
-						methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
+						methodobj = new ClassForMethods(parts[0],parts[2],meth[i].getName(),attributesFromMethods,simpleClassName);
+						methodList.add(methodobj);
 					}
 				}
 			}
