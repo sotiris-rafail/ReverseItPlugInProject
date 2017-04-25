@@ -17,6 +17,8 @@ public class ParsingClassFiles {
 	public ClassForAttributes attriobj;
 	public SearchingForAttributes sfa;
 	public UMLClassDrawer ucd;
+	String className = "";
+	String simpleClassName;
 	
 	public ClassForClass ParsingListwithClassFiles(String path) {
 		
@@ -29,8 +31,8 @@ public class ParsingClassFiles {
 			if(cp.parse().isClass()) {
 				classobj = new ClassForClass(true,false,false);
 				cp = new ClassParser(path);
-				String className = cp.parse().getClassName();
-				String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
+				className = cp.parse().getClassName();
+				simpleClassName = className.substring(className.lastIndexOf('.') + 1);
 				classobj.setClassName(simpleClassName);
 				cp = new ClassParser(path);
 				//Check if the class on the path has a SuperClass
@@ -74,7 +76,11 @@ public class ParsingClassFiles {
 					String[] parts = string.split(" ");
 					String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
 					if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
-						methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
+						if(meth[i].getName().equals("<init>")) {
+							methodobj = new ClassForMethods(parts[0],parts[1],simpleClassName,attributesFromMethods,simpleClassName);
+						} else {
+							methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
+						}
 						methodList.add(methodobj);
 					}
 				}
@@ -107,8 +113,8 @@ public class ParsingClassFiles {
 				if(!(classobj.isInterface())){
 					classobj = new ClassForClass(true,"nothing");
 					cp = new ClassParser(path);
-					String className = cp.parse().getClassName();
-					String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
+					className = cp.parse().getClassName();
+					simpleClassName = className.substring(className.lastIndexOf('.') + 1);
 					classobj.setClassName(simpleClassName);
 					//The attributes of each class
 					Field fields[] = new Field[1000];
