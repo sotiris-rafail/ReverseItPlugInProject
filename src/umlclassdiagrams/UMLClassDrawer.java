@@ -23,10 +23,12 @@ public class UMLClassDrawer {
 	public ClassForAttributes cla1;
 	public ClassForMethods clm1;
 	public Display d= Display.getDefault();
-	public Font font;
+	public Font classfont;
+	public Font packageFont;
 	public Label classLabel;
 	public Label methodLabel;
 	public Label attributeLabel;
+	public Label packageLabel;
 	public PolylineConnection connection;
 	Figure content = new Figure();
 	XYLayout contentsLayout  = new XYLayout();
@@ -57,6 +59,11 @@ public class UMLClassDrawer {
 			while (!d.readAndDispatch())
 				d.sleep();	
 	}
+	public void kill(){
+		if(shell.isDisposed()){
+			shell.close();
+		}
+	}
 	
 	public void buildTable(List<ClassForClass> classList){
 		for(ClassForClass clas:classList){
@@ -64,20 +71,33 @@ public class UMLClassDrawer {
 			methodLabels = new ArrayList<>();
 			//if class is CLass
 			if(clas.isClass()){
-				font = new Font(null, "Arial", 12, SWT.BOLD);
 				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/class/class_obj.png")));
-				classLabel.setFont(font);
+				classfont = new Font(null, "Arial", 12, SWT.BOLD);
+				if(!(clas.getPackageName().equals(""))){
+					packageFont = new Font(null, "Arial", 8,0);
+					packageLabel = new Label(clas.getPackageName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/class/class_obj.png")));
+					packageLabel.setFont(packageFont);
+				}
+				classLabel.setFont(classfont);
 				if(!(clas.getAttris().isEmpty())){
 					for(ClassForAttributes obj:clas.getAttris()){
-						//if(obj.getAccess() == "private") {
+						if(obj.getAccess().equals("private")) {
 							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
 								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/field/field_private_obj.png")));
 							attributeLabels.add(attributeLabel);
-						//} else if(obj.getAccess() == "public") {
-						//	attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
-						//		new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/field/field_public_obj.png")));
-						//	attributeLabels.add(attributeLabel);
-						//}
+						} else if(obj.getAccess().equals("public")) {
+							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+									new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/field/field_public_obj.png")));
+							attributeLabels.add(attributeLabel);
+						} else if(obj.getAccess().equals("protected")) {
+							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+									new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/field/field_protected_obj.png")));
+							attributeLabels.add(attributeLabel);
+						} else {
+							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+									new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/field/field_default_obj.png")));
+							attributeLabels.add(attributeLabel);
+						}
 					}
 				}else{
 					attributeLabel = new Label(" ");
@@ -85,25 +105,35 @@ public class UMLClassDrawer {
 				}
 				if(!(clas.getMethods().isEmpty())){
 					for(ClassForMethods obj:clas.getMethods()){
-						String attrMeth = "";
-						if(obj.isHasAttributes().length != 0) {
-							for(int i = 0; i < obj.isHasAttributes().length; i=i+2) {
+						String typeOfAttribute = "";
+						String attrMeth[] = {};
+						if(obj.isHasAttributes() != null) {
+							for(int i = 0; i < obj.isHasAttributes().length; i++) {
+								attrMeth = obj.isHasAttributes()[i].split(" ");
 								if(i == 0){
-									attrMeth = obj.isHasAttributes()[i];
+									typeOfAttribute = attrMeth[0];
 								} else {
-									attrMeth += ", " +  obj.isHasAttributes()[i];
+									typeOfAttribute += ", " +  attrMeth[1];;
 								}
 							}
 						}
-						//if(obj.getAccess() == "public") {
-							methodLabel = new Label(obj.getMethodName() + "(" + attrMeth + ")" + " : " + obj.getType(), 
+						if(obj.getAccess().equals("public")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
 								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpub_obj.png")));
 							methodLabels.add(methodLabel);
-						//} else if(obj.getAccess() == "private") {
-						//	methodLabel = new Label(obj.getMethodName() + " : " + obj.getType(), 
-						//		new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
-						//	methodLabels.add(methodLabel);
-						//}						
+						} else if(obj.getAccess().equals("private")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
+							methodLabels.add(methodLabel);
+						}else if(obj.getAccess().equals("protected")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
+							methodLabels.add(methodLabel);
+						}else if(obj.getAccess().equals("static")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
+							methodLabels.add(methodLabel);
+						}
 					}
 				}else{
 					methodLabel = new Label(" ");
@@ -111,14 +141,45 @@ public class UMLClassDrawer {
 				}
 				//If class is Interface
 			}else if(clas.isInterface()){
-				font = new Font(null, "Arial", 12, SWT.ITALIC);
+				classfont = new Font(null, "Arial", 12, SWT.ITALIC);
 				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/class/int_obj.png")));
-				classLabel.setFont(font);
+				if(!(clas.getPackageName().equals(""))){
+					packageFont = new Font(null, "Arial", 8,0);
+					packageLabel = new Label(clas.getPackageName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/class/class_obj.png")));
+					packageLabel.setFont(packageFont);
+				}
+				classLabel.setFont(classfont);
 				if(!(clas.getMethods().isEmpty())){
 					for(ClassForMethods obj:clas.getMethods()){
-						methodLabel = new Label(obj.getMethodName() + " : " + obj.getType(), 
-							new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpub_obj.png")));
-						methodLabels.add(methodLabel);
+						String typeOfAttribute = "";
+						String attrMeth[] = {};
+						if(obj.isHasAttributes() != null) {
+							for(int i = 0; i < obj.isHasAttributes().length; i++) {
+								attrMeth = obj.isHasAttributes()[i].split(" ");
+								if(i == 0){
+									typeOfAttribute = attrMeth[0];
+								} else {
+									typeOfAttribute += ", " +  attrMeth[1];;
+								}
+							}
+						}
+						if(obj.getAccess().equals("public")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpub_obj.png")));
+							methodLabels.add(methodLabel);
+						} else if(obj.getAccess().equals("private")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
+							methodLabels.add(methodLabel);
+						}else if(obj.getAccess().equals("protected")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
+							methodLabels.add(methodLabel);
+						}else if(obj.getAccess().equals("static")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
+							methodLabels.add(methodLabel);
+						}
 					}
 				}else{
 					methodLabel = new Label(" ");
@@ -126,20 +187,33 @@ public class UMLClassDrawer {
 				}
 			//if class is abstract
 			}else if(clas.isAbstract()){
-				font = new Font(null, "Arial", 12, SWT.BOLD);
+				classfont = new Font(null, "Arial", 12, SWT.BOLD);
 				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/class/class_obj.png")));
-				classLabel.setFont(font);
+				if(!(clas.getPackageName().equals(""))){
+					packageFont = new Font(null, "Arial", 8,0);
+					packageLabel = new Label(clas.getPackageName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/class/class_obj.png")));
+					packageLabel.setFont(packageFont);
+				}
+				classLabel.setFont(classfont);
 				if(!(clas.getAttris().isEmpty())){
 					for(ClassForAttributes obj:clas.getAttris()){
-						//if(obj.getAccess() == "private") {
+						if(obj.getAccess().equals("private")) {
 							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
 								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/field/field_private_obj.png")));
 							attributeLabels.add(attributeLabel);
-							//} else if(obj.getAccess() == "public") {
-							//attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
-							//	new Image(d, UMLClassFigure.class.getResourceAsStream("resources/field/field_public_obj.gif")));
-							//attributeLabels.add(attributeLabel);
-							//}
+						} else if(obj.getAccess().equals("public")) {
+							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+									new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/field/field_public_obj.png")));
+							attributeLabels.add(attributeLabel);
+						} else if(obj.getAccess().equals("protected")) {
+							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+									new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/field/field_protected_obj.png")));
+							attributeLabels.add(attributeLabel);
+						} else {
+							attributeLabel = new Label(obj.getAttributeName() + " : " + obj.getType(), 
+									new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/field/field_default_obj.png")));
+							attributeLabels.add(attributeLabel);
+						}
 					}
 				}else{
 					attributeLabel = new Label(" ");
@@ -147,9 +221,35 @@ public class UMLClassDrawer {
 				}
 				if(!(clas.getMethods().isEmpty())){
 					for(ClassForMethods obj:clas.getMethods()){
-						methodLabel = new Label(obj.getMethodName() + " : " + obj.getType(), 
-							new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpub_obj.png")));
-						methodLabels.add(methodLabel);
+						String typeOfAttribute = "";
+						String attrMeth[] = {};
+						if(obj.isHasAttributes() != null) {
+							for(int i = 0; i < obj.isHasAttributes().length; i++) {
+								attrMeth = obj.isHasAttributes()[i].split(" ");
+								if(i == 0){
+									typeOfAttribute = attrMeth[0];
+								} else {
+									typeOfAttribute += ", " +  attrMeth[1];;
+								}
+							}
+						}
+						if(obj.getAccess().equals("public")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpub_obj.png")));
+							methodLabels.add(methodLabel);
+						} else if(obj.getAccess().equals("private")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
+							methodLabels.add(methodLabel);
+						}else if(obj.getAccess().equals("protected")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
+							methodLabels.add(methodLabel);
+						}else if(obj.getAccess().equals("static")) {
+							methodLabel = new Label(obj.getMethodName() + "(" + typeOfAttribute + ")" + " : " + obj.getType(), 
+								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpri_obj.png")));
+							methodLabels.add(methodLabel);
+						}						
 					}
 				}else{
 					methodLabel = new Label(" ");
@@ -172,6 +272,9 @@ public class UMLClassDrawer {
 				y +=200;	
 			}
 				final UMLClassFigure classFigure = new UMLClassFigure(classLabel);
+				if(packageLabel != null){
+					classFigure.getPackageFigure().add(packageLabel);
+				}
 				for(Label attri:attributeLabels){
 					classFigure.getAttributesCompartment().add(attri);
 				}

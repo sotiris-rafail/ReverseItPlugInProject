@@ -20,6 +20,7 @@ public class ClassForClass {
     private String one = "no";
     private List<ClassForMethods> methods = new ArrayList<>();
     private List<ClassForAttributes> attris = new ArrayList<>();
+    private String packageName;
     
     public ClassForClass(){}
 	public ClassForClass(boolean isClass, boolean doesExtention, boolean doesImplementation) {
@@ -161,7 +162,13 @@ public class ClassForClass {
 	public void setAttris(List<ClassForAttributes> attris) {
 		this.attris = attris;
 	}
-    public String show(List<String> whatExtends){
+    public String getPackageName() {
+		return packageName;
+	}
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+	public String show(List<String> whatExtends){
     	String superClassNames= "null";
     	try{
     		if(!(whatExtends.isEmpty()) || (whatExtends != null)){

@@ -35,6 +35,8 @@ public class ParsingClassFiles {
 				simpleClassName = className.substring(className.lastIndexOf('.') + 1);
 				classobj.setClassName(simpleClassName);
 				cp = new ClassParser(path);
+				classobj.setPackageName(cp.parse().getPackageName());
+				cp = new ClassParser(path);
 				//Check if the class on the path has a SuperClass
 				String superclassname = cp.parse().getSuperclassName();
 				if(!(superclassname.equals("java.lang.Object"))) {
@@ -61,10 +63,14 @@ public class ParsingClassFiles {
 				cp = new ClassParser(path);
 				fields = cp.parse().getFields();
 				for(int i = 0; i < fields.length; i++) {
-					
 					String string2 = fields[i].toString();
 					String[] parts2 = string2.split(" "); 
-					attriobj = new ClassForAttributes(parts2[0],parts2[1],parts2[2]);
+					if(!(classobj.getPackageName().equals(""))){
+						String[] attriType = parts2[1].split("\\.");
+						attriobj = new ClassForAttributes(parts2[0],attriType[attriType.length-1],parts2[2]);
+					}else{
+						attriobj = new ClassForAttributes(parts2[0],parts2[1],parts2[2]);
+					}
 					attriList.add(attriobj);
 				}
 				//The methods of each class
@@ -75,11 +81,25 @@ public class ParsingClassFiles {
 					String string = meth[i].toString();
 					String[] parts = string.split(" ");
 					String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
+					if(attributesFromMethods != null){
+						for(int x =0;x<attributesFromMethods.length;x++){
+							if(!(classobj.getPackageName().equals(""))){
+								String[] asd = attributesFromMethods[x].split("\\.");
+								if(asd.length > 1)
+									System.out.println("asd0"+asd[0]+" asd1"+asd[1]);
+							}
+						}
+					}
 					if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
 						if(meth[i].getName().equals("<init>")) {
 							methodobj = new ClassForMethods(parts[0],parts[1],simpleClassName,attributesFromMethods,simpleClassName);
 						} else {
-							methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
+							if(!(classobj.getPackageName().equals(""))){
+								String[] methType = parts[1].split("\\.");
+								methodobj = new ClassForMethods(parts[0],methType[methType.length-1],meth[i].getName(),attributesFromMethods,simpleClassName);
+							}else{
+								methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
+							}
 						}
 						methodList.add(methodobj);
 					}
@@ -93,6 +113,8 @@ public class ParsingClassFiles {
 				String className = cp.parse().getClassName();
 				String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
 				classobj.setClassName(simpleClassName);
+				cp = new ClassParser(path);
+				classobj.setPackageName(cp.parse().getPackageName());
 				//The methods of each class
 				cp = new ClassParser(path);
 				Method meth[] = new Method[1000];
@@ -116,6 +138,8 @@ public class ParsingClassFiles {
 					className = cp.parse().getClassName();
 					simpleClassName = className.substring(className.lastIndexOf('.') + 1);
 					classobj.setClassName(simpleClassName);
+					cp = new ClassParser(path);
+					classobj.setPackageName(cp.parse().getPackageName());
 					//The attributes of each class
 					Field fields[] = new Field[1000];
 					cp = new ClassParser(path);
@@ -123,7 +147,12 @@ public class ParsingClassFiles {
 					for(int i = 0; i < fields.length; i++) {
 						String string2 = fields[i].toString();
 						String[] parts2 = string2.split(" "); 
-						attriobj = new ClassForAttributes(parts2[0],parts2[1],parts2[2]);
+						if(!(classobj.getPackageName().equals(""))){
+							String[] attriType = parts2[1].split("\\.");
+							attriobj = new ClassForAttributes(parts2[0],attriType[attriType.length-1],parts2[2]);
+						}else{
+							attriobj = new ClassForAttributes(parts2[0],parts2[1],parts2[2]);
+						}
 						attriList.add(attriobj);
 					}
 					//The methods of each class
