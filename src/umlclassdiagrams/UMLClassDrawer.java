@@ -85,8 +85,18 @@ public class UMLClassDrawer {
 				}
 				if(!(clas.getMethods().isEmpty())){
 					for(ClassForMethods obj:clas.getMethods()){
+						String attrMeth = "";
+						if(obj.isHasAttributes().length != 0) {
+							for(int i = 0; i < obj.isHasAttributes().length; i=i+2) {
+								if(i == 0){
+									attrMeth = obj.isHasAttributes()[i];
+								} else {
+									attrMeth += ", " +  obj.isHasAttributes()[i];
+								}
+							}
+						}
 						//if(obj.getAccess() == "public") {
-							methodLabel = new Label(obj.getMethodName() + " : " + obj.getType(), 
+							methodLabel = new Label(obj.getMethodName() + "(" + attrMeth + ")" + " : " + obj.getType(), 
 								new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/method/methpub_obj.png")));
 							methodLabels.add(methodLabel);
 						//} else if(obj.getAccess() == "private") {
