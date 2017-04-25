@@ -8,6 +8,7 @@ public class UMLClassFigure extends Figure {
 	public static Color classColor = new Color(null, 255, 255, 206);
 	private CompartmentFigure attributeFigure = new CompartmentFigure();
 	private CompartmentFigure methodFigure = new CompartmentFigure();
+	private CompartmentFigure packageFigure = new CompartmentFigure();
 	
 	public UMLClassFigure(Label name) {
 		
@@ -18,6 +19,7 @@ public class UMLClassFigure extends Figure {
 		setOpaque(true);
 		
 		add(name);	
+		 add(packageFigure);
 	    add(attributeFigure);
 	    add(methodFigure);
 	}
@@ -30,5 +32,9 @@ public class UMLClassFigure extends Figure {
 	public CompartmentFigure getMethodsCompartment() {
 		
 		return methodFigure;
+	}
+
+	public CompartmentFigure getPackageFigure() {
+		return packageFigure;
 	}
 }

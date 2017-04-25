@@ -61,6 +61,7 @@ public class GlobalMenuHandler extends AbstractHandler implements IWorkbenchWind
 		// TODO Auto-generated method stub
 		try {
 			classDraw = new UMLClassDrawer();
+			//classDraw.kill();
 			new ParsingClassFiles();
 			getJavaFilesPath = new ArrayList<String>();//list that takes java files
 			getfiles = new getJavaFiles();//get file object
