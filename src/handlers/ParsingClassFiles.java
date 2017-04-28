@@ -78,18 +78,10 @@ public class ParsingClassFiles {
 				Method meth[] = new Method[1000];
 				meth = cp.parse().getMethods();
 				for(int i = 0; i < meth.length; i++) {
+					
 					String string = meth[i].toString();
 					String[] parts = string.split(" ");
 					String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
-					if(attributesFromMethods != null){
-						for(int x =0;x<attributesFromMethods.length;x++){
-							if(!(classobj.getPackageName().equals(""))){
-								String[] asd = attributesFromMethods[x].split("\\.");
-								if(asd.length > 1)
-									System.out.println("asd0"+asd[0]+" asd1"+asd[1]);
-							}
-						}
-					}
 					if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
 						if(meth[i].getName().equals("<init>")) {
 							methodobj = new ClassForMethods(parts[0],parts[1],simpleClassName,attributesFromMethods,simpleClassName);
@@ -164,7 +156,16 @@ public class ParsingClassFiles {
 						String[] parts = string.split(" ");
 						String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
 						if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
-							methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
+							if(meth[i].getName().equals("<init>")) {
+								methodobj = new ClassForMethods(parts[0],parts[1],simpleClassName,attributesFromMethods,simpleClassName);
+							} else {
+								if(!(classobj.getPackageName().equals(""))){
+									String[] methType = parts[1].split("\\.");
+									methodobj = new ClassForMethods(parts[0],methType[methType.length-1],meth[i].getName(),attributesFromMethods,simpleClassName);
+								}else{
+									methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
+								}
+							}
 							methodList.add(methodobj);
 						}
 					}
