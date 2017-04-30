@@ -18,7 +18,8 @@ import Classes.ClassForMethods;
 import handlers.ParsingClassFiles;
 
 public class UMLClassDrawer {
-
+	List<UMLClassFigure> listFigures = new ArrayList<>();
+	List<ClassForClass> allClasses = new ArrayList<>();
 	public ClassForClass clc1= new ClassForClass();
 	public ClassForAttributes cla1;
 	public ClassForMethods clm1;
@@ -29,16 +30,17 @@ public class UMLClassDrawer {
 	public Label methodLabel;
 	public Label attributeLabel;
 	public Label packageLabel;
-	public PolylineConnection connection;
 	Figure content = new Figure();
 	XYLayout contentsLayout  = new XYLayout();
+	PolylineConnection connection = new PolylineConnection();
+	PolygonDecoration decoration = new PolygonDecoration();
 	Shell shell = new Shell(d);
 	public ParsingClassFiles pcl = new ParsingClassFiles();
 	LightweightSystem lws = new LightweightSystem(shell);
 	UMLClassFigure classFigure;
 	List<Label> attributeLabels ;
 	List<Label> methodLabels ;
-	
+	List<Label> classLabels = new ArrayList<>() ;
 	public void startDrawer(){
 			d.syncExec(new Runnable(){
 				public void run(){
@@ -66,6 +68,7 @@ public class UMLClassDrawer {
 	}
 	
 	public void buildTable(List<ClassForClass> classList){
+		allClasses = classList;
 		for(ClassForClass clas:classList){
 			attributeLabels = new ArrayList<>();
 			methodLabels = new ArrayList<>();
@@ -315,6 +318,7 @@ public class UMLClassDrawer {
 	int x = 0;
 	int y = 0;
 	int count = 0;
+	List<PolylineConnection> connections = new ArrayList<>();
 	public void displayClassDiagrams() {
 		try {
 			if(count%2 == 0 && count != 0){
@@ -332,30 +336,43 @@ public class UMLClassDrawer {
 				for(Label meth:methodLabels){
 					classFigure.getMethodsCompartment().add(meth);
 				}
-			
+			classLabels.add(classLabel);
 			contentsLayout.setConstraint(classFigure, new Rectangle(10+x, 10+y, -1, -1));
 			x +=200;
 			count++;
 			
 			// Creating the connection 
-			connection = new PolylineConnection();
-			ChopboxAnchor sourceAnchor = new ChopboxAnchor(classFigure);
-			connection.setSourceAnchor(sourceAnchor);
-			
-			// Creating the decoration 
-			PolygonDecoration decoration = new PolygonDecoration();
-			PointList decorationPointList = new PointList();
-			decorationPointList.addPoint(0, 0);
-			decorationPointList.addPoint(-2, 2);
-			decorationPointList.addPoint(-4, 0);
-			decorationPointList.addPoint(-2, -2);
-			decoration.setTemplate(decorationPointList);
-			connection.setSourceDecoration(decoration);
-			
-			content.add(connection);
-			
-			
+			for(ClassForClass clss:allClasses){
+				if(classLabel.getText().equals(clss.getClassName())){
+					if(!clss.getCoonectsWith().isEmpty()){
+						ChopboxAnchor sourceAnchor = new ChopboxAnchor(classFigure);
+						connection.setSourceAnchor(sourceAnchor);
+						break;
+					}
+				}
+			}
+			ChopboxAnchor targetAnchor;
+			for(Label lbl: classLabels){
+				for(ClassForClass clss:allClasses){
+					if(!lbl.getText().equals(clss.getClassName())){
+						if(!clss.getCoonectsWith().isEmpty()){							
+							for(String string : clss.getCoonectsWith()){
+								if(lbl.getText().equals(string)){
+									targetAnchor = new ChopboxAnchor(classFigure);
+									connection.setTargetAnchor(targetAnchor);
+									clss.getCoonectsWith().remove(string);
+									if(clss.getCoonectsWith().isEmpty()){
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			connection.setTargetDecoration(decoration);
 			content.add(classFigure);
+			content.add(connection);
 			lws.setContents(content);
 		} catch(Exception e) {
 			

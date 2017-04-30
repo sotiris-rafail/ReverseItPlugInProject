@@ -8,7 +8,7 @@ public class SearchingForAttributes {
     	if(!hasPackage){
     		attributesOfMethod = splitWIthoutDots(string);
     	}else{
-    			attributesOfMethod = splitWIthDots(string);			
+    		attributesOfMethod = splitWIthDots(string);			
     	}
         return attributesOfMethod;
     }

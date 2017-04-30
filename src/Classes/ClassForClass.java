@@ -21,6 +21,7 @@ public class ClassForClass {
     private List<ClassForMethods> methods = new ArrayList<>();
     private List<ClassForAttributes> attris = new ArrayList<>();
     private String packageName;
+    private List<String> coonectsWith = new ArrayList<>();
     
     public ClassForClass(){}
 	public ClassForClass(boolean isClass, boolean doesExtention, boolean doesImplementation) {
@@ -65,7 +66,8 @@ public class ClassForClass {
                 ", whatExtends=" + show(whatExtends) +
                 ", whichInterface=" + whichInterface +"\n"+
                 " Attributes="+ showAttri(attris) +"\n"+
-                " Methods="+ showMethods(methods)+
+                " Methods="+ showMethods(methods) +"\n"+
+                " Connects With Classes="+ show(coonectsWith)+
                 '}';
     }
 
@@ -167,6 +169,12 @@ public class ClassForClass {
 	}
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
+	}
+	public List<String> getCoonectsWith() {
+		return coonectsWith;
+	}
+	public void setCoonectsWith(List<String> coonectsWith) {
+		this.coonectsWith = coonectsWith;
 	}
 	public String show(List<String> whatExtends){
     	String superClassNames= "null";

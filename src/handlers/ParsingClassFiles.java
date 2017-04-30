@@ -75,6 +75,7 @@ public class ParsingClassFiles {
 						attriobj = new ClassForAttributes(parts2[0],parts2[1],parts2[2]);
 					}
 					attriList.add(attriobj);
+					classobj.getCoonectsWith().add(attriobj.getType());
 				}
 				//The methods of each class
 				cp = new ClassParser(path);
@@ -176,7 +177,6 @@ public class ParsingClassFiles {
 			}
 			classobj.setAttris(attriList);
 			classobj.setMethods(methodList);
-
 		}catch(Exception e) {
 			
 			System.out.println(e.getMessage());
