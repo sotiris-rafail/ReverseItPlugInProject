@@ -19,7 +19,7 @@ public class ParsingClassFiles {
 	public UMLClassDrawer ucd;
 	String className = "";
 	String simpleClassName;
-	
+	Boolean hasPackage = false;
 	public ClassForClass ParsingListwithClassFiles(String path) {
 		
 		try {
@@ -36,6 +36,9 @@ public class ParsingClassFiles {
 				classobj.setClassName(simpleClassName);
 				cp = new ClassParser(path);
 				classobj.setPackageName(cp.parse().getPackageName());
+				if(!(classobj.getPackageName().isEmpty())){
+					hasPackage = true;
+				}
 				cp = new ClassParser(path);
 				//Check if the class on the path has a SuperClass
 				String superclassname = cp.parse().getSuperclassName();
@@ -81,7 +84,7 @@ public class ParsingClassFiles {
 					
 					String string = meth[i].toString();
 					String[] parts = string.split(" ");
-					String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
+					String[] attributesFromMethods = sfa.findAttributes(meth[i].toString(),hasPackage);
 					if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
 						if(meth[i].getName().equals("<init>")) {
 							methodobj = new ClassForMethods(parts[0],parts[1],simpleClassName,attributesFromMethods,simpleClassName);
@@ -114,7 +117,7 @@ public class ParsingClassFiles {
 				for(int i = 0; i < meth.length; i++) {
 					String string = meth[i].toString();
 					String[] parts = string.split(" ");
-					String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
+					String[] attributesFromMethods = sfa.findAttributes(meth[i].toString(),hasPackage);
 					if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
 						methodobj = new ClassForMethods(parts[0],parts[2],meth[i].getName(),attributesFromMethods,simpleClassName);
 						methodList.add(methodobj);
@@ -154,7 +157,7 @@ public class ParsingClassFiles {
 					for(int i = 0; i < meth.length; i++) {
 						String string = meth[i].toString();
 						String[] parts = string.split(" ");
-						String[] attributesFromMethods = sfa.findAttributes(meth[i].toString());
+						String[] attributesFromMethods = sfa.findAttributes(meth[i].toString(),hasPackage);
 						if(parts[0].equalsIgnoreCase("public") || parts[0].equalsIgnoreCase("protected") || parts[0].equalsIgnoreCase("private") || parts[0].equalsIgnoreCase("static")) {
 							if(meth[i].getName().equals("<init>")) {
 								methodobj = new ClassForMethods(parts[0],parts[1],simpleClassName,attributesFromMethods,simpleClassName);

@@ -115,9 +115,19 @@ public class UMLClassDrawer {
 							for(int i = 0; i < obj.isHasAttributes().length; i++) {
 								attrMeth = obj.isHasAttributes()[i].split(" ");
 								if(i == 0){
-									typeOfAttribute = attrMeth[0];
+									String[] checkForDots = attrMeth[0].split("\\.");
+									if(checkForDots.length == 2){
+										typeOfAttribute = checkForDots[1];
+									}else{
+										typeOfAttribute = attrMeth[0];
+									}
 								} else {
-									typeOfAttribute += ", " +  attrMeth[1];
+									String[] checkForDots = attrMeth[1].split("\\.");
+									if(checkForDots.length == 2){
+										typeOfAttribute += ", " + checkForDots[1];
+									}else{
+										typeOfAttribute += ", " +  attrMeth[1];
+									}
 								}
 							}
 						}
