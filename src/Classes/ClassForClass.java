@@ -22,6 +22,8 @@ public class ClassForClass {
     private List<ClassForAttributes> attris = new ArrayList<>();
     private String packageName;
     private List<String> coonectsWith = new ArrayList<>();
+    private double points = 0;
+    private int interfacePoints = 0;
     
     public ClassForClass(){}
 	public ClassForClass(boolean isClass, boolean doesExtention, boolean doesImplementation) {
@@ -67,7 +69,8 @@ public class ClassForClass {
                 ", whichInterface=" + whichInterface +"\n"+
                 " Attributes="+ showAttri(attris) +"\n"+
                 " Methods="+ showMethods(methods) +"\n"+
-                " Connects With Classes="+ show(coonectsWith)+
+                " Connects With Classes="+ show(coonectsWith) +"\n"+
+                " Points = " + points +
                 '}';
     }
 
@@ -218,4 +221,16 @@ public class ClassForClass {
     	}
     	return superClassNames;
     }
+	public double getPoints() {
+		return points;
+	}
+	public void setPoints(double points) {
+		this.points = points;
+	}
+	public int getInterfacePoints() {
+		return interfacePoints;
+	}
+	public void setInterfacePoints(int interfacePoints) {
+		this.interfacePoints = interfacePoints;
+	}
 }

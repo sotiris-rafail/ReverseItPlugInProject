@@ -73,7 +73,8 @@ public class UMLClassDrawer {
 			attributeLabels = new ArrayList<>();
 			methodLabels = new ArrayList<>();
 			//if class is CLass
-			if(clas.isClass()){
+			if(clas.isClass() && (clas.getPoints() > 0.001)){
+				System.out.println(clas.ForCLass());
 				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/class/class_obj.png")));
 				classfont = new Font(null, "Arial", 12, SWT.BOLD);
 				if(!(clas.getPackageName().equals(""))){
@@ -166,7 +167,7 @@ public class UMLClassDrawer {
 					methodLabels.add(methodLabel);
 				}
 				//If class is Interface
-			}else if(clas.isInterface()){
+			}else if(clas.isInterface() && clas.getInterfacePoints() > 3){
 				classfont = new Font(null, "Arial", 12, SWT.ITALIC);
 				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/class/int_obj.png")));
 				if(!(clas.getPackageName().equals(""))){

@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
+import Classes.CalculatePoints;
 import Classes.ClassForClass;
 import umlclassdiagrams.UMLClassDrawer;
 
@@ -44,6 +45,7 @@ public class GlobalMenuHandler extends AbstractHandler implements IWorkbenchWind
 	ParsingClassFiles pcf;
 	UMLClassDrawer classDraw;
 	List<ClassForClass> classes = new ArrayList<>();
+	CalculatePoints calcPoints = new CalculatePoints();
 	public GlobalMenuHandler() {
 	}
 
@@ -79,6 +81,7 @@ public class GlobalMenuHandler extends AbstractHandler implements IWorkbenchWind
 					classes.add(pcf.ParsingListwithClassFiles(string));
 				}
 			}
+			calcPoints.calculatePointsForMethods(classes);
 			classDraw.buildTable(classes);
 			System.exit(0);
 		}catch(Exception e) {

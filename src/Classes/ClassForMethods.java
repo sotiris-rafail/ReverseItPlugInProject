@@ -1,6 +1,3 @@
-/**
- * Created by swthrhs on 14/12/2016.
- */
 package Classes;
 
 
@@ -10,6 +7,7 @@ public class ClassForMethods {
     private String methodName;
     private String[] hasAttributes;
     private String whereBelongs;
+    private double points = 0;
     
 	public ClassForMethods(String access, String type, String methodName, String[] hasAttributes, String whereBelongs) {
         this.type = type;
@@ -60,7 +58,15 @@ public class ClassForMethods {
     }
 
 
-    @Override
+    public double getPoints() {
+		return points;
+	}
+
+	public void setPoints(double points) {
+		this.points = points;
+	}
+
+	@Override
     public String toString() {
     	
         return "ClassForMethods{" +
@@ -69,6 +75,7 @@ public class ClassForMethods {
                 ", methodName='" + methodName + '\'' +
                 ", hasAttributes=" + showAttributes(hasAttributes) +
                 ", whereBelongs='" + whereBelongs + '\'' +
+                ", Points = " + points +
                 '}';
     }
     public String showAttributes(String[] table){
