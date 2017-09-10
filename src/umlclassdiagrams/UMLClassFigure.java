@@ -19,7 +19,7 @@ public class UMLClassFigure extends Figure {
 		setOpaque(true);
 		
 		add(name);	
-		 add(packageFigure);
+		add(packageFigure);
 	    add(attributeFigure);
 	    add(methodFigure);
 	}
