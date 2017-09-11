@@ -22,6 +22,8 @@ public class SearchingForAttributes {
   	    }
   	    if (attributesOfMethod.length == 0) {
   	    	attributesOfMethod = null;
+  	    } else if (attributesOfMethod[0].equals("")){
+  	    	attributesOfMethod = null;
   	    }
     	return attributesOfMethod;
     }

@@ -15,6 +15,8 @@ public class CalculatePoints {
 							method.setPoints(method.getPoints() + Points.hasAttributes);
 							method.setPoints(method.getPoints() + getPointsFromMethod(method.isHasAttributes()[i], classes));
 						}
+					}else {
+						method.setPoints(method.getPoints() + getPointsFromMethodType(method, classes));
 					}
 				}
 			} 
@@ -40,7 +42,7 @@ public class CalculatePoints {
 		}
 		for(ClassForClass classs : classes){
 			if (method.getType().equals(classs.getClassName())){
-			return Points.customReturnType;
+				return Points.customReturnType;
 			} else {
 				return Points.standardReturnType;
 			}
