@@ -58,7 +58,7 @@ public class ParsingClassFiles {
 					interfaces.add(simpleIntefaceName);
 				}
 				classobj.setWhichInterface(interfaces);
-				if(!(interfaces.isEmpty())){
+				if(!(interfaces.isEmpty())) {
 					classobj.setDoesImplementation(true);
 				}
 				//The attributes of each class
@@ -68,10 +68,10 @@ public class ParsingClassFiles {
 				for(int i = 0; i < fields.length; i++) {
 					String string2 = fields[i].toString();
 					String[] parts2 = string2.split(" "); 
-					if(!(classobj.getPackageName().equals(""))){
+					if(!(classobj.getPackageName().equals(""))) {
 						String[] attriType = parts2[1].split("\\.");
 						attriobj = new ClassForAttributes(parts2[0],attriType[attriType.length-1],parts2[2]);
-					}else{
+					} else {
 						attriobj = new ClassForAttributes(parts2[0],parts2[1],parts2[2]);
 					}
 					attriList.add(attriobj);
@@ -93,7 +93,7 @@ public class ParsingClassFiles {
 							if(!(classobj.getPackageName().equals(""))){
 								String[] methType = parts[1].split("\\.");
 								methodobj = new ClassForMethods(parts[0],methType[methType.length-1],meth[i].getName(),attributesFromMethods,simpleClassName);
-							}else{
+							} else {
 								methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
 							}
 						}
@@ -103,7 +103,7 @@ public class ParsingClassFiles {
 			}
 			//Check if the class on the path is an Interface
 			cp = new ClassParser(path);
-			if(cp.parse().isInterface()){
+			if(cp.parse().isInterface()) {
 				classobj = new ClassForClass(true);
 				cp = new ClassParser(path);
 				String className = cp.parse().getClassName();
@@ -127,8 +127,8 @@ public class ParsingClassFiles {
 			}
 			//Check if the class on the path is an Abstract Class
 			cp = new ClassParser(path);
-			if(cp.parse().isAbstract()){
-				if(!(classobj.isInterface())){
+			if(cp.parse().isAbstract()) {
+				if(!(classobj.isInterface())) {
 					classobj = new ClassForClass(true,"nothing");
 					cp = new ClassParser(path);
 					className = cp.parse().getClassName();
@@ -143,10 +143,10 @@ public class ParsingClassFiles {
 					for(int i = 0; i < fields.length; i++) {
 						String string2 = fields[i].toString();
 						String[] parts2 = string2.split(" "); 
-						if(!(classobj.getPackageName().equals(""))){
+						if(!(classobj.getPackageName().equals(""))) {
 							String[] attriType = parts2[1].split("\\.");
 							attriobj = new ClassForAttributes(parts2[0],attriType[attriType.length-1],parts2[2]);
-						}else{
+						} else {
 							attriobj = new ClassForAttributes(parts2[0],parts2[1],parts2[2]);
 						}
 						attriList.add(attriobj);
@@ -163,10 +163,10 @@ public class ParsingClassFiles {
 							if(meth[i].getName().equals("<init>")) {
 								methodobj = new ClassForMethods(parts[0],parts[1],simpleClassName,attributesFromMethods,simpleClassName);
 							} else {
-								if(!(classobj.getPackageName().equals(""))){
+								if(!(classobj.getPackageName().equals(""))) {
 									String[] methType = parts[1].split("\\.");
 									methodobj = new ClassForMethods(parts[0],methType[methType.length-1],meth[i].getName(),attributesFromMethods,simpleClassName);
-								}else{
+								} else {
 									methodobj = new ClassForMethods(parts[0],parts[1],meth[i].getName(),attributesFromMethods,simpleClassName);
 								}
 							}
@@ -177,7 +177,7 @@ public class ParsingClassFiles {
 			}
 			classobj.setAttris(attriList);
 			classobj.setMethods(methodList);
-		}catch(Exception e) {
+		} catch(Exception e) {
 			
 			System.out.println(e.getMessage());
 			System.out.println(e.getCause().toString());

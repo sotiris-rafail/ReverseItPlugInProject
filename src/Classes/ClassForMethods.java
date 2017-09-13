@@ -78,11 +78,11 @@ public class ClassForMethods {
                 ", Points = " + points +
                 '}';
     }
-    public String showAttributes(String[] table){
+    public String showAttributes(String[] table) {
     	String stringToShow = "null";
-    	if(!(table == null)){
+    	if(!(table == null)) {
     		stringToShow = "";
-    		for(int i = 0;i<table.length;i++){
+    		for(int i = 0;i<table.length;i++) {
     			stringToShow += table[i].toString() + ""; 
     		}
     	}

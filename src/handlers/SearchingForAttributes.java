@@ -2,44 +2,44 @@ package handlers;
 
 public class SearchingForAttributes {
 
-    public String[] findAttributes(String string, boolean hasPackage){
+    public String[] findAttributes(String string, boolean hasPackage) {
     	
     	String[] attributesOfMethod = {};
-    	if(!hasPackage){
+    	if(!hasPackage) {
     		attributesOfMethod = splitWIthoutDots(string);
-    	}else{
+    	} else {
     		attributesOfMethod = splitWIthDots(string);			
     	}
         return attributesOfMethod;
     }
     
-    public String[] splitWIthoutDots(String string){
+    public String[] splitWIthoutDots(String string) {
     	String[] extractAttributes = string.split("\\(");
   	    String[] removeParethesis = extractAttributes[1].split("\\)");
   	    String[] attributesOfMethod = {};
-		if(!(removeParethesis.length == 0)){
+		if(!(removeParethesis.length == 0)) {
   	    	attributesOfMethod  = removeParethesis[0].split(",");
   	    }
   	    if (attributesOfMethod.length == 0) {
   	    	attributesOfMethod = null;
-  	    } else if (attributesOfMethod[0].equals("")){
+  	    } else if (attributesOfMethod[0].equals("")) {
   	    	attributesOfMethod = null;
   	    }
     	return attributesOfMethod;
     }
     
-    public String[] splitWIthDots(String string){
+    public String[] splitWIthDots(String string) {
     	String[] extractAttributes = string.split("\\(");
   	    String[] removeParethesis = extractAttributes[1].split("\\)");
   	    String[] attributesOfMethod = {};
-		if(!(removeParethesis.length == 0)){
+		if(!(removeParethesis.length == 0)) {
   	    	attributesOfMethod  = removeParethesis[0].split(",");
   	    }
   	    if (attributesOfMethod.length == 0) {
   	    	attributesOfMethod = null;
   	    }
-  	    if(attributesOfMethod != null){
-  	    	if(attributesOfMethod[0].equals("netbeans")){
+  	    if(attributesOfMethod != null) {
+  	    	if(attributesOfMethod[0].equals("netbeans")) {
   	    		attributesOfMethod = null;
   	    	}
   	    }

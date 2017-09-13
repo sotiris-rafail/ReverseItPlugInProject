@@ -1,7 +1,6 @@
 package Classes;
 
 public class Points {
-
 	public static double eachStandardClassObject = 0.3;
 	public static double eachCustomClassObject = 0.5;
 	public static double eachStandardAttrbite = 0.1;

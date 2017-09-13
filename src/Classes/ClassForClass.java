@@ -48,7 +48,7 @@ public class ClassForClass {
         this.isInterface = false;
         this.isAbstract = isAbstract;
     }
-    public void findTheTruth(String motherClass,String InterfaceImplementation){
+    public void findTheTruth(String motherClass,String InterfaceImplementation) {
         if(one.equals("yes")) {
             if (doesExtention) {
                 whatExtends.add(motherClass);
@@ -153,6 +153,7 @@ public class ClassForClass {
     public void setWhatExtends(String whatExtends) {
         this.whatExtends.add(whatExtends);
     }
+    
     public List<ClassForMethods> getMethods() {
 		return methods;
 	}
@@ -167,69 +168,80 @@ public class ClassForClass {
 	public void setAttris(List<ClassForAttributes> attris) {
 		this.attris = attris;
 	}
+	
     public String getPackageName() {
 		return packageName;
 	}
+    
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
+	
 	public List<String> getCoonectsWith() {
 		return coonectsWith;
 	}
+	
 	public void setCoonectsWith(List<String> coonectsWith) {
 		this.coonectsWith = coonectsWith;
 	}
-	public String show(List<String> whatExtends){
+	
+	public String show(List<String> whatExtends) {
     	String superClassNames= "null";
     	try{
-    		if(!(whatExtends.isEmpty()) || (whatExtends != null)){
+    		if(!(whatExtends.isEmpty()) || (whatExtends != null)) {
     			superClassNames = "";
     			for(String name: whatExtends){
     				superClassNames += name;
     			}
     		}
-    	}catch(Exception e){
+    	} catch(Exception e) {
     		System.out.println(e.getMessage());
     	}
     	return superClassNames;
     }
-    public String showAttri(List<ClassForAttributes> whatExtends){
+	
+    public String showAttri(List<ClassForAttributes> whatExtends) {
     	String superClassNames= "null";
     	try{
-    		if(!(whatExtends.isEmpty()) || (whatExtends != null)){
+    		if(!(whatExtends.isEmpty()) || (whatExtends != null)) {
     			superClassNames = "";
     			for(ClassForAttributes name: whatExtends){
     				superClassNames +=  name+"\n";
     			}
     		}
-    	}catch(Exception e){
+    	} catch(Exception e) {
     		System.out.println(e.getMessage());
     	}
     	return superClassNames;
     }
-    public String showMethods(List<ClassForMethods> whatExtends){
+    
+    public String showMethods(List<ClassForMethods> whatExtends) {
     	String superClassNames= "null";
-    	try{
-    		if(!(whatExtends.isEmpty()) || (whatExtends != null)){
+    	try {
+    		if(!(whatExtends.isEmpty()) || (whatExtends != null)) {
     			superClassNames = "";
     			for(ClassForMethods name: whatExtends){
     				superClassNames += name+"\n";
     			}
     		}
-    	}catch(Exception e){
+    	} catch(Exception e) {
     		System.out.println(e.getMessage());
     	}
     	return superClassNames;
     }
+    
 	public double getPoints() {
 		return points;
 	}
+	
 	public void setPoints(double points) {
 		this.points = points;
 	}
+	
 	public int getInterfacePoints() {
 		return interfacePoints;
 	}
+	
 	public void setInterfacePoints(int interfacePoints) {
 		this.interfacePoints = interfacePoints;
 	}

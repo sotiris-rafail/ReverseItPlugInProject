@@ -84,7 +84,7 @@ public class GlobalMenuHandler extends AbstractHandler implements IWorkbenchWind
 			calcPoints.calculatePointsForMethods(classes);
 			classDraw.buildTable(classes);
 			System.exit(0);
-		}catch(Exception e) {
+		} catch(Exception e) {
 			
 			System.out.println(e.getMessage());
 			System.out.println(e.getStackTrace().toString());
