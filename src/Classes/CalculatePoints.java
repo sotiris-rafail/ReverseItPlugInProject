@@ -9,9 +9,9 @@ public class CalculatePoints {
 			if(classs.isClass() || classs.isAbstract()) {
 				classs.setPoints(calculatePointsForClasses(classs));
 				for(ClassForMethods method : classs.getMethods()) {
+					method.setPoints(method.getPoints() + getPointsFromMethodType(method, classes));
 					if (method.isHasAttributes() != null){
 						for(int i = 0; i < method.isHasAttributes().length; i++) {
-							method.setPoints(method.getPoints() + getPointsFromMethodType(method, classes));
 							method.setPoints(method.getPoints() + Points.hasAttributes);
 							method.setPoints(method.getPoints() + getPointsFromMethod(method.isHasAttributes()[i], classes));
 						}

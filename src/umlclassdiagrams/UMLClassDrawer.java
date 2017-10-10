@@ -73,6 +73,7 @@ public class UMLClassDrawer {
 			attributeLabels = new ArrayList<>();
 			methodLabels = new ArrayList<>();
 			//if class is CLass
+			System.out.println(clas.ForCLass());
 			if(clas.isClass() && (clas.getPoints() > 0.1)){
 				classLabel = new Label(clas.getClassName(), new Image(d, UMLClassFigure.class.getResourceAsStream("/resources/class/class_obj.png")));
 				classfont = new Font(null, "Arial", 12, SWT.BOLD);
@@ -276,7 +277,7 @@ public class UMLClassDrawer {
 	public void displayClassDiagrams() {
 		try {
 			if(count <= 5 && count != 0) {
-				x += 250;
+				x += 450;
 			} else if(count > 5) {
 				count = 0;
 				y += 400;
