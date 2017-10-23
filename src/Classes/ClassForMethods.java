@@ -1,7 +1,7 @@
 package Classes;
 
 
-public class ClassForMethods {
+public class ClassForMethods implements Comparable<ClassForMethods>{
     private String access;
     private String type;
     private String methodName;
@@ -88,4 +88,16 @@ public class ClassForMethods {
     	}
     	return stringToShow;
     }
+
+
+	@Override
+	public int compareTo(ClassForMethods arg0) {
+		if(arg0.getPoints() > getPoints()){
+			return 1;
+		} else if (arg0.getPoints() < getPoints()){
+			return -1;
+		} else {
+			return 0;
+		}
+	}
 }

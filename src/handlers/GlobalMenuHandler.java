@@ -13,6 +13,7 @@ package handlers;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -82,6 +83,7 @@ public class GlobalMenuHandler extends AbstractHandler implements IWorkbenchWind
 				}
 			}
 			calcPoints.calculatePointsForMethods(classes);
+			classes.forEach(obj -> Collections.sort(obj.getMethods()));
 			classDraw.buildTable(classes);
 			System.exit(0);
 		} catch(Exception e) {
